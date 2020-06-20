@@ -8,7 +8,7 @@ router.get('/:userId', async (req, res, next) => {
 });
 
 router.post('/', async (req, res) => {
-  const result = await req.context.models.Feed.create({ ...req.body });
+  const result = await Feed.create({ ...req.body });
   return res.send(result);
 });
 
