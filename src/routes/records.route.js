@@ -1,9 +1,10 @@
-const { Router } = require('express')
+const { Router } = require('express');
+const auth = require('../middleware/auth.middleware');
 const RecordsModel = require('../models/records.model');
 const router = Router();
 
-router.get('/:userId', async (req, res) => {
-  const result = await RecordsModel.findOne(req.params);
+router.get('/', auth, async (req, res) => {
+  const result = await RecordsModel.findOne({ userId: req.user.id });
   res.send(result);
 });
 

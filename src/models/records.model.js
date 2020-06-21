@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const recordsSchema = new mongoose.Schema({
-  userId: { type: Number, unique: true, required: true },
+  userId: { type: mongoose.Types.ObjectId, unique: true, required: true },
   records: [{
     url: { type: String, unique: false, required: true },
     title: { type: String, unique: false, required: true },

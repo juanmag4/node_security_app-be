@@ -2,8 +2,9 @@ const { Router } = require('express');
 const { check, validationResult } = require('express-validator/check');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const router = Router();
+const auth = require('../middleware/auth.middleware');
 const User = require('../models/user.model');
+const router = Router();
 
 router.post(
   "/signup",
@@ -131,7 +132,7 @@ router.post(
   }
 );
 
-router.get("/me", async (req, res) => {
+router.get("/me", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     res.json(user);
