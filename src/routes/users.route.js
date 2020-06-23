@@ -75,16 +75,14 @@ router.post(
   "/login",
   [
     check("email", "Please enter a valid email").isEmail(),
-    check("password", "Please enter a valid password").isLength({
-      min: 6
-    })
+    check("password", "The password should be of at least 6 characters").isLength({ min: 6 })
   ],
   async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
       return res.status(400).json({
-        errors: errors.array()
+        errors: errors.mapped()
       });
     }
 
@@ -93,16 +91,18 @@ router.post(
       let user = await User.findOne({
         email
       });
-      if (!user)
+      if (!user) {
         return res.status(400).json({
-          message: "User Not Exist"
+          errors: { email: { msg: "User Does Not Exist" } }
         });
+      }
 
       const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch)
+      if (!isMatch) {
         return res.status(400).json({
-          message: "Incorrect Password!"
+          errors: { password: { msg: "Incorrect Password!" } }
         });
+      }
 
       const payload = {
         user: {
